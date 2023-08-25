@@ -1,14 +1,18 @@
 import React from 'react';
 import { useState,useEffect } from 'react';
-
+// import { Button } from 'devextreme-react/button';
 import axios from 'axios';
 import 'devextreme/data/odata/store';
+import { Item } from 'devextreme-react/form';
 import DataGrid, {
   Column,
   Pager,
   Paging,
   FilterRow,
-  Lookup
+  Popup,
+  Editing,
+  Form
+  // Lookup
 } from 'devextreme-react/data-grid';
 
 
@@ -24,6 +28,8 @@ export default function Task() {
       console.error('Error fetching data:', error);
     }
   };
+
+
   useEffect(() => {
    
     fetchData();
@@ -46,13 +52,44 @@ export default function Task() {
         <Paging defaultPageSize={10} />
         <Pager showPageSizeSelector={true} showInfo={true} />
         <FilterRow visible={true} />
-
+        {/* <Editing
+      
+            mode="row"
+            allowUpdating={true}
+            allowDeleting={true}
+            allowAdding={true} /> */}
         {/* <Column dataField={'Task_ID'} width={90} hidingPriority={2} /> */}
+        <Editing
+            mode="popup"
+            allowUpdating={true}
+            allowAdding={true}
+            allowDeleting={true}>
+            <Popup title="Info" showTitle={true} width={700} height={525} />
+            <Form>
+              <Item itemType="group" colCount={2} colSpan={2}>
+                <Item dataField="clientcode" />
+                <Item dataField="Name" />
+                <Item dataField="useragent" />
+                <Item dataField="amount" />
+                <Item dataField="Position" />
+                <Item dataField="HireDate" />
+                <Item
+                  dataField="Notes"
+                  editorType="dxTextArea"
+                  colSpan={2}
+                  // editorOptions={notesEditorOptions} 
+                  />
+              </Item>
+
+            </Form>
+          </Editing>
         <Column
           dataField={'clientcode'}
           width={190}
+          key={'clientcode'}
           caption={'Client Code'}
           hidingPriority={8}
+        
         />
         <Column
           dataField={'Name'}
@@ -143,77 +180,48 @@ export default function Task() {
     hidingPriority={8}
 
   />
-        {/* <Column
-          dataField={'Task_Status'}
-          caption={'useragent'}
-          hidingPriority={6}
-        />
-        <Column
-          dataField={'Task_Priority'}
-          caption={'Priority'}
-          hidingPriority={5}
-        >
-          <Lookup
-            dataSource={priorities}
-            valueExpr={'value'}
-            displayExpr={'name'}
-          />
-        </Column>
-        <Column
-          dataField={'ResponsibleEmployee.Employee_Full_Name'}
-          caption={'Assigned To'}
-          allowSorting={false}
-          hidingPriority={7}
-        />
-        <Column
-          dataField={'Task_Start_Date'}
-          caption={'Start Date'}
-          dataType={'date'}
-          hidingPriority={3}
-        />
-        <Column
-          dataField={'Task_Due_Date'}
-          caption={'Due Date'}
-          dataType={'date'}
-          hidingPriority={4}
-        />
-        <Column
-          dataField={'Task_Priority'}
-          caption={'Priority'}
-          name={'Priority'}
-          hidingPriority={1}
-        />
-        <Column
-          dataField={'Task_Completion'}
-          caption={'Completion'}
-          hidingPriority={0}
-        /> */}
+     <Column
+    dataField={ `actions`}
+    width={190}
+    caption={'actions'}
+    hidingPriority={8}
+
+  />
+     {/* <Button
+                  width={120}
+                  text="Delete"
+                  type="danger"
+                  stylingMode="contained"
+                  onClick={()=>console.log('deleted')}
+                /> */}
+      
+         
       </DataGrid>
     </React.Fragment>
 )}
 
-const dataSource = {
-  store: {
-    type: 'odata',
-    key: 'Task_ID',
-    url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks'
-  },
-  expand: 'ResponsibleEmployee',
-  select: [
-    'Task_ID',
-    'Task_Subject',
-    'Task_Start_Date',
-    'Task_Due_Date',
-    'Task_Status',
-    'Task_Priority',
-    'Task_Completion',
-    'ResponsibleEmployee/Employee_Full_Name'
-  ]
-};
+// const dataSource = {
+//   store: {
+//     type: 'odata',
+//     key: 'clientcode',
+//     url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks'
+//   },
+//   expand: 'ResponsibleEmployee',
+//   select: [
+//     'Client Code',
+//     'Task_Subject',
+//     'Task_Start_Date',
+//     'Task_Due_Date',
+//     'Task_Status',
+//     'Task_Priority',
+//     'Task_Completion',
+//     'ResponsibleEmployee/Employee_Full_Name'
+//   ]
+// };
 
-const priorities = [
-  { name: 'High', value: 4 },
-  { name: 'Urgent', value: 3 },
-  { name: 'Normal', value: 2 },
-  { name: 'Low', value: 1 }
-];
+// const priorities = [
+//   { name: 'High', value: 4 },
+//   { name: 'Urgent', value: 3 },
+//   { name: 'Normal', value: 2 },
+//   { name: 'Low', value: 1 }
+// ];
